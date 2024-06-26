@@ -10,9 +10,8 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var girilenBirim =  0.0
-    @State private var selectedBirim = "liters"
+    @State private var selectedBirim = "ml"
     @State private var selectedSecondBirim = "ml"
-    @State private var outBirim = 0.0
     
     let volume = ["ml", "liters", "cups", "pints", "gallons"]
     
@@ -40,10 +39,32 @@ struct ContentView: View {
         
     }
     
+    var donustur : Double {
+       
+        var sonVeri = 0.0
+    
+        
+        if selectedSecondBirim == volume[0]{
+            sonVeri = mLHesapla
+        }else if selectedSecondBirim == volume[1]{
+            sonVeri = mLHesapla / 1000
+        
+        }else if selectedSecondBirim == volume[2]{
+            sonVeri = mLHesapla / 200
+            
+        }else if selectedSecondBirim == volume[3]{
+            sonVeri = mLHesapla / 568
+            
+        }else if selectedSecondBirim == volume[4]{
+            sonVeri = mLHesapla / 3785.411784
+            
+        }
+        
+        return sonVeri
+        
+    }
     
 
-    
-    
    
     var body: some View {
         NavigationStack{
@@ -51,7 +72,7 @@ struct ContentView: View {
                 
                 Section{
                   
-                    TextField("Birim girin", value : $girilenBirim , format: .number)
+                    TextField("Birim girin", value : $girilenBirim , format: .number).multilineTextAlignment(.center)
                   
                     Picker("", selection: $selectedBirim){
                         ForEach(volume , id: \.self){
@@ -59,14 +80,14 @@ struct ContentView: View {
                         }
                     }.pickerStyle(.segmented)
                     
-                    Text("\(mLHesapla) ml")
+                    Text("\(mLHesapla, specifier: "%.3f") ml")
 
-                    
+
                 }
                 
                 
                 
-                Section("convert to"){
+                Section(" ml convert to"){
                     
                     
                     Picker("", selection: $selectedSecondBirim){
@@ -75,13 +96,14 @@ struct ContentView: View {
                         }
                     }.pickerStyle(.segmented)
                     
-                    Text("")
+                    Text("\(donustur, specifier: "%.3f") \(selectedSecondBirim) ")
                     
                 }
                 
                 
                 
-            }.navigationTitle("FLUID CALC")
+            }
+            .navigationTitle("FLUID CALC🥛")
         }
     }
 }
